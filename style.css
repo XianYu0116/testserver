@@ -280,14 +280,21 @@ html, body {
 }
 .menu-logo {
     font-size: clamp(20px, 4vw, 32px);
-    color: #55ffff;
+    color: #5555ff;
     text-shadow:
-        2px 2px 0 #005555,
+        2px 2px 0 #000033,
         -1px -1px 0 #000,
         1px -1px 0 #000,
         -1px 1px 0 #000,
-        1px 1px 0 #000,
-        0 0 12px rgba(85,255,255,0.3);
+        1px 1px 0 #000;
+    display: block;
+}
+.menu-logo-sub {
+    font-size: clamp(10px, 2vw, 14px);
+    color: #aaa;
+    text-shadow: 1px 1px 0 #000;
+    display: block;
+    margin-top: 2px;
 }
 .menu-nav {
     display: flex;
