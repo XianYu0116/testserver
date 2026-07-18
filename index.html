@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XianyuMoe 服务器 - Minecraft 1.21.4</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Dirt border -->
+    <div class="dirt-border">
+        <div class="dirt-edge top"></div>
+        <div class="dirt-edge bottom"></div>
+        <div class="dirt-edge left"></div>
+        <div class="dirt-edge right"></div>
+    </div>
+
+    <!-- ===== MAIN MENU ===== -->
+    <div class="screen active" id="screen-menu">
+        <div class="menu-wrap">
+            <div class="menu-header">
+                <div class="menu-header-inner">
+                    <span class="menu-logo text-shadow-lg">XianyuMoe</span>
+                    <nav class="menu-nav">
+                        <span class="server-ip-text text-shadow-sm" onclick="copyIP()" title="点击复制">mc.xymoe.online</span>
+                        <span class="status-dot-online" id="menu-dot"></span>
+                        <span class="text-shadow-sm" id="menu-players" style="color:#55ff55">--/--</span>
+                    </nav>
+                </div>
+            </div>
+            <div class="menu-main">
+                <canvas id="particle-canvas"></canvas>
+                <div class="menu-content">
+                    <div class="mc-title-wrap">
+                        <h1 class="mc-title">XianyuMoe</h1>
+                        <span class="mc-splash" id="splash"></span>
+                    </div>
+
+                    <div class="menu-buttons">
+                        <button class="button" onclick="openScreen('status')">服务器状态</button>
+                        <button class="button" onclick="openScreen('gameplay')">玩法介绍</button>
+                        <button class="button" onclick="openScreen('stats')">玩家统计</button>
+                        <button class="button" onclick="openScreen('announcements')">公告</button>
+                        <button class="button" onclick="openScreen('downloads')">下载</button>
+                    </div>
+
+                    <div class="menu-bottom text-shadow-sm">XianyuMoe 1.21.4 &mdash; Leaves</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STATUS ===== -->
+    <div class="screen" id="screen-status">
+        <div class="screen-header">
+            <button class="mc-back" onclick="openScreen('menu')">&larr; 返回</button>
+            <h2 class="text-shadow">服务器状态</h2>
+        </div>
+        <div class="screen-body">
+            <div class="st-banner panel">
+                <img class="st-icon" src="server-icon.png" alt="Server Icon">
+                <div class="st-banner-info">
+                    <div class="st-motd" id="st-motd"></div>
+                    <div class="st-version" id="st-version">Leaves 1.21.4</div>
+                </div>
+            </div>
+            <div class="panel" style="padding:16px; margin-bottom:16px;">
+                <div class="s-row">
+                    <span class="s-label">状态</span>
+                    <span class="s-value"><span class="status-dot-online" id="st-dot"></span> <span id="st-text">检测中...</span></span>
+                </div>
+                <div class="s-row">
+                    <span class="s-label">地址</span>
+                    <span class="s-value s-clickable" onclick="copyIP()">mc.xymoe.online</span>
+                </div>
+                <div class="s-row">
+                    <span class="s-label">版本</span>
+                    <span class="s-value" id="st-version-row">XianyuMoe 1.21.4</span>
+                </div>
+                <div class="s-row">
+                    <span class="s-label">在线</span>
+                    <span class="s-value" id="st-count">-- / --</span>
+                </div>
+                <div class="s-row">
+                    <span class="s-label">延迟</span>
+                    <span class="s-value" id="st-ping">--</span>
+                </div>
+            </div>
+            <div class="panel" style="padding:4px;">
+                <h3 style="font-size:14px; padding:8px 12px; color:#111; text-shadow:0 0 3px rgba(255,255,255,0.3);">在线玩家</h3>
+                <div class="player-list-box" id="st-players">
+                    <div class="empty-msg">正在加载...</div>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:16px;">
+                <button class="button" style="font-size:13px; padding:8px 20px;" onclick="fetchStatus()">&#8635; 刷新</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== GAMEPLAY ===== -->
+    <div class="screen" id="screen-gameplay">
+        <div class="screen-header">
+            <button class="mc-back" onclick="openScreen('menu')">&larr; 返回</button>
+            <h2 class="text-shadow">玩法介绍</h2>
+        </div>
+        <div class="screen-body">
+            <div class="gp-grid">
+                <div class="gp-card panel" data-idx="0">
+                    <div class="gp-card-icon"><img src="imgs/items/diamond_sword.png" alt=""></div>
+                    <h3>原版生存</h3>
+                    <p>最纯粹的 Minecraft 体验，不添加任何模组，享受原汁原味的冒险旅程。</p>
+                </div>
+                <div class="gp-card panel" data-idx="1">
+                    <div class="gp-card-icon"><img src="imgs/items/repeater.png" alt=""></div>
+                    <h3>生电技术</h3>
+                    <p>探索红石机械的奥秘，建造高效农场和自动化设施，体验技术流的乐趣。</p>
+                </div>
+                <div class="gp-card panel" data-idx="2">
+                    <div class="gp-card-icon"><img src="imgs/items/comparator.png" alt=""></div>
+                    <h3>红石工程</h3>
+                    <p>从简单的自动门到复杂的计算器，用红石实现你的每一个疯狂想法。</p>
+                </div>
+                <div class="gp-card panel" data-idx="3">
+                    <div class="gp-card-icon"><img src="imgs/items/golden_apple.png" alt=""></div>
+                    <h3>养老模式</h3>
+                    <p>佛系玩家的天堂，在这里你可以慢慢建造属于自己的温馨小屋。</p>
+                </div>
+                <div class="gp-card panel" data-idx="4">
+                    <div class="gp-card-icon"><img src="imgs/items/filled_map.png" alt=""></div>
+                    <h3>地皮系统</h3>
+                    <p>领取专属地皮，打造你的个人空间，和邻居一起建设繁华社区。</p>
+                </div>
+                <div class="gp-card panel" data-idx="5">
+                    <div class="gp-card-icon"><img src="imgs/items/iron_sword.png" alt=""></div>
+                    <h3>领地保护</h3>
+                    <p>保护你的建筑和物品不被破坏，安心发展不用担心恶意破坏。</p>
+                </div>
+                <div class="gp-card panel" data-idx="6">
+                    <div class="gp-card-icon"><img src="imgs/items/emerald.png" alt=""></div>
+                    <h3>经济系统</h3>
+                    <p>通过交易、任务和活动赚取金币，在玩家商店中买卖物品。</p>
+                </div>
+                <div class="gp-card panel" data-idx="7">
+                    <div class="gp-card-icon"><img src="imgs/items/totem_of_undying.png" alt=""></div>
+                    <h3>社区活动</h3>
+                    <p>定期举办建造比赛、寻宝活动和节日庆典，丰厚奖励等你来拿。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== STATS ===== -->
+    <div class="screen" id="screen-stats">
+        <div class="screen-header">
+            <button class="mc-back" onclick="openScreen('menu')">&larr; 返回</button>
+            <h2 class="text-shadow">玩家统计</h2>
+        </div>
+        <div class="screen-body">
+            <div class="stats-grid">
+                <div class="panel stats-card">
+                    <div class="stats-icon"><img src="imgs/items/totem_of_undying.png" alt=""></div>
+                    <div class="stats-val" id="stat-online">--</div>
+                    <div class="stats-label">当前在线</div>
+                </div>
+                <div class="panel stats-card">
+                    <div class="stats-icon"><img src="imgs/items/diamond.png" alt=""></div>
+                    <div class="stats-val" id="stat-max">--</div>
+                    <div class="stats-label">最大在线</div>
+                </div>
+                <div class="panel stats-card">
+                    <div class="stats-icon"><img src="imgs/items/emerald.png" alt=""></div>
+                    <div class="stats-val" id="stat-total">--</div>
+                    <div class="stats-label">注册玩家</div>
+                </div>
+                <div class="panel stats-card">
+                    <div class="stats-icon"><img src="imgs/items/golden_apple.png" alt=""></div>
+                    <div class="stats-val" id="stat-uptime">--</div>
+                    <div class="stats-label">运行时间</div>
+                </div>
+            </div>
+            <div class="panel stats-detail">
+                <h3>服务器信息</h3>
+                <div class="s-row"><span class="s-label">服务器名称</span><span class="s-value">XianyuMoe</span></div>
+                <div class="s-row"><span class="s-label">服务器版本</span><span class="s-value" id="stat-version">Leaves 1.21.4</span></div>
+                <div class="s-row"><span class="s-label">服务器地址</span><span class="s-value s-clickable" onclick="copyIP()">mc.xymoe.online</span></div>
+                <div class="s-row"><span class="s-label">最大玩家数</span><span class="s-value" id="stat-maxplayers">20</span></div>
+                <div class="s-row"><span class="s-label">游戏模式</span><span class="s-value">生存</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ANNOUNCEMENTS ===== -->
+    <div class="screen" id="screen-announcements">
+        <div class="screen-header">
+            <button class="mc-back" onclick="openScreen('menu')">&larr; 返回</button>
+            <h2 class="text-shadow">公告</h2>
+        </div>
+        <div class="screen-body">
+            <div class="ann-list">
+                <div class="panel ann-card">
+                    <span class="ann-tag new">新</span>
+                    <div class="ann-body"><h3>服务器正式上线</h3><p>XianyuMoe 1.21.4 服务器正式开放！欢迎大家加入，正在开荒中。</p><span class="ann-date">2026-07-18</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DOWNLOADS ===== -->
+    <div class="screen" id="screen-downloads">
+        <div class="screen-header">
+            <button class="mc-back" onclick="openScreen('menu')">&larr; 返回</button>
+            <h2 class="text-shadow">客户端下载</h2>
+        </div>
+        <div class="screen-body">
+            <div class="dl-recommend panel" id="dl-recommend" style="display:none;">
+                <div class="dl-rec-icon" id="dl-rec-icon"></div>
+                <div class="dl-rec-info">
+                    <h3 id="dl-rec-title"></h3>
+                    <p id="dl-rec-desc"></p>
+                </div>
+            </div>
+
+            <div class="dl-list">
+                <div class="panel dl-card" id="dl-high">
+                    <div class="dl-card-header">
+                        <div class="dl-icon"><img src="imgs/items/nether_star.png" alt=""></div>
+                        <div class="dl-info">
+                            <h3>高配光影版</h3>
+                            <span class="dl-badge dl-badge-hot">极致画质</span>
+                        </div>
+                    </div>
+                    <div class="dl-card-body">
+                        <div class="dl-specs">
+                            <div class="dl-spec"><span class="dl-spec-label">CPU</span><span class="dl-spec-val">i5 / R5 及以上</span></div>
+                            <div class="dl-spec"><span class="dl-spec-label">内存</span><span class="dl-spec-val">8GB 及以上</span></div>
+                            <div class="dl-spec"><span class="dl-spec-label">显卡</span><span class="dl-spec-val">GTX 1060 / RX 580 及以上</span></div>
+                        </div>
+                        <p class="dl-desc">内置光影着色器、高清材质、实体优化。支持动态光影、水面反射、体积云等效果，畅享极致视觉体验。</p>
+                        <div class="dl-actions">
+                            <a href="https://yun.139.com/shareweb/#/w/i/2w2KNyyzFJLh9" target="_blank" class="button dl-btn">下载客户端</a>
+                            <div class="dl-code">提取码: <span class="dl-code-val" onclick="copyText('sp9y')">sp9y</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel dl-card" id="dl-low">
+                    <div class="dl-card-header">
+                        <div class="dl-icon"><img src="imgs/items/elytra.png" alt=""></div>
+                        <div class="dl-info">
+                            <h3>轻量优化版</h3>
+                            <span class="dl-badge dl-badge-lite">低配推荐</span>
+                        </div>
+                    </div>
+                    <div class="dl-card-body">
+                        <div class="dl-specs">
+                            <div class="dl-spec"><span class="dl-spec-label">CPU</span><span class="dl-spec-val">i3 / R3 及以上</span></div>
+                            <div class="dl-spec"><span class="dl-spec-label">内存</span><span class="dl-spec-val">4GB 及以上</span></div>
+                            <div class="dl-spec"><span class="dl-spec-label">显卡</span><span class="dl-spec-val">核显 / GTX 750 及以上</span></div>
+                        </div>
+                        <p class="dl-desc">精简模组、关闭冗余特效、优化内存占用。低配电脑也能稳定流畅运行，保留核心玩法体验。</p>
+                        <div class="dl-actions">
+                            <a href="https://yun.139.com/shareweb/#/w/i/2w2KNVA9rEVpr" target="_blank" class="button dl-btn">下载客户端</a>
+                            <div class="dl-code">提取码: <span class="dl-code-val" onclick="copyText('qvyw')">qvyw</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mc-toast" id="toast">已复制</div>
+    <script src="script.js"></script>
+</body>
+</html>
